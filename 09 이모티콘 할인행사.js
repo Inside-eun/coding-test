@@ -1,7 +1,7 @@
 function solution(users, emoticons) {
   let result = [0, 0];
   let allSaleCase = [[]];
-  const discounts = [0.9, 0.8, 0.7, 0.6]; // 10%, 20%, 30%, 40% 할인 비율 // 초기 결과 배열 (빈 배열을 포함)
+  const discounts = [0.9, 0.8, 0.7, 0.6]; // 10%, 20%, 30%, 40% 할인 비율
 
   for (let price of emoticons) {
     let newResult = [];
@@ -13,11 +13,41 @@ function solution(users, emoticons) {
     allSaleCase = newResult;
   }
   console.log(allSaleCase);
-  for (let i = 0; i<allSaleCase.length; i++) {
-    for(let user of users){
-        if(allSaleCase[i])
+  // 각 할인 조합을 사용자별로 평가
+  for (let saleCase of allSaleCase) {
+    let totalRevenue = 0;
+    let subscribingUsers = 0;
+
+    for (let user of users) {
+      let [minDiscount, minTotal] = user;
+      let userTotal = 0;
+
+      for (let i = 0; i < emoticons.length; i++) {
+        let originalPrice = emoticons[i];
+        let discountedPrice = saleCase[i];
+        let discountPercentage =
+          ((originalPrice - discountedPrice) / originalPrice) * 100;
+
+        if (discountPercentage >= minDiscount) {
+          userTotal += discountedPrice;
+        }
+      }
+
+      if (userTotal >= minTotal) {
+        subscribingUsers++;
+      } else {
+        totalRevenue += userTotal;
+      }
+    }
+
+    if (
+      subscribingUsers > result[0] ||
+      (subscribingUsers === result[0] && totalRevenue > result[1])
+    ) {
+      result = [subscribingUsers, totalRevenue];
     }
   }
+  return result;
 }
 
 solution(
