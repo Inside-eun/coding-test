@@ -16,20 +16,17 @@ const input = require("fs")
 
 let result = [];
 
-// for (let n of input) {
-//   let count = 0;
-//   let line = [];
-//   n = n.slice(1);
-//   for(let m of n){
-//     line.map((el, idx) => el>m ? count += (line.length-idx) : null)
-//   }
-// }
+//하나하나 돌지 말고 주어진 배열에서 자기 앞에 큰 애들의 수를 구하면 된다
 
-let line = [3];
-let n = [1, 2, 4];
-let count = 0;
-for (let m of n) {
-  let big = 0;
-  line.map((el, idx) => (el > m ? console.log(m) : null));
+for (let n of input) {
+  let count = 0;
+  n = n.slice(1);
+  let line = [];
+  for (let m of n) {
+    line.forEach((el) => (el > m ? count++ : null));
+    line.push(m);
+  }
+  result.push(count);
 }
-// console.log(count);
+
+result.forEach((el, idx) => console.log(idx + 1, "", el));
